@@ -36,10 +36,6 @@ app.use(requestLogger)
 app.use(express.static('dist'))
 
 
-let notes = [
-]
-
-
 app.get('/api/notes', (request, response) => {
   Note.find({}).then(notes => {
     response.json(notes)
@@ -82,11 +78,11 @@ app.put('/api/notes/:id', (request, response, next) => {
   const { content, important } = request.body
 
   Note.findByIdAndUpdate(
-    request.params.id, 
+    request.params.id,
 
     { content, important },
     { new: true, runValidators: true, context: 'query' }
-  ) 
+  )
     .then(updatedNote => {
       response.json(updatedNote)
     })
@@ -95,7 +91,7 @@ app.put('/api/notes/:id', (request, response, next) => {
 
 app.delete('/api/notes/:id', (request, response, next) => {
   Note.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
